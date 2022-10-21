@@ -1,0 +1,32 @@
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { CourseItem } from './store/models/courseItem.model';
+import { AppState } from './store/models/app-state.model';
+import { NgForm } from '@angular/forms';
+import { AddItemAction } from './store/actions/course.action';
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
+})
+export class AppComponent implements OnInit {
+  courseItems$: Observable<Array<CourseItem>>;
+  constructor(private store: Store<AppState>) {}
+  ngOnInit(): void {
+    this.courseItems$ = this.store.select((store) => store.course);
+  }
+
+  addCourse(form: NgForm) {
+    this.store.dispatch(new AddItemAction(form.value));
+    //alert('ab')
+    var x = this.store.select(state => state.course)
+    console.log(JSON.stringify(x['actionsObserver']['_value']['payload']));
+    form.reset();
+  }
+
+  deleteCourse(form: NgForm) {
+    this.store.dispatch(new AddItemAction(form.value));
+    form.reset();
+  }
+}
